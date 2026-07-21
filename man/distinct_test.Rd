@@ -60,6 +60,7 @@ if computational resources are available, we encourage users to set P_4 = 20,000
 A \code{\linkS4class{data.frame}} object.
 Columns `gene` and `cluster_id` contain the gene and cell-cluster name, while `p_val`, `p_adj.loc` and `p_adj.glb` report the raw p-values, locally and globally adjusted p-values, via Benjamini and Hochberg (BH) correction.
 In locally adjusted p-values (`p_adj.loc`) BH correction is applied in each cluster separately, while in globally adjusted p-values (`p_adj.glb`) BH correction is performed to the results from all clusters.
+Columns `T_obs` has the test statististic that quantifies the difference between groups, and is used to compute `p_val`.
 Column `filtered` indicates whether a gene-cluster result was filtered (if TRUE), or analyzed (if FALSE).
 A gene-cluster combination is filtered when fewer than `min_non_zero_cells` non-zero cells are available.
 Filtered results have raw and adjusted p-values equal to 1.

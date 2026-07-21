@@ -143,6 +143,7 @@ List perm_test_parallel(unsigned int const& P,                             // nu
   unsigned int n_samples_A = samples_in_group_A.n_elem;                        // number of samples in group A
   unsigned int n_samples_B = samples_in_group_B.n_elem;                        // number of samples in group B
   arma::vec res(n_genes); res.fill(-1);                             // array of p-values
+  arma::vec res_T_obs(n_genes); res.fill(-1);                       // array of p-values
   //arma::mat chunk = core_load(n_genes,nCores);
   arma::vec seq0(N_breaks), breaks(N_breaks);
   for (b=0 ; b<N_breaks ; b++) {
@@ -408,9 +409,10 @@ List perm_test_parallel(unsigned int const& P,                             // nu
       }
       
       res(gene) = p_val;
+      res_T_obs(gene) = T_obs;
     }
   }       // End of loop for genes
   
-  List output = List::create( res );
+  List output = List::create( res, res_T_obs);
   return output;
 }

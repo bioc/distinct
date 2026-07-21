@@ -150,6 +150,7 @@ List perm_test_covariates(unsigned int const& P,                             // 
   unsigned int n_samples_A = samples_in_group_A.n_elem;                        // number of samples in group A
   unsigned int n_samples_B = samples_in_group_B.n_elem;                        // number of samples in group B
   arma::mat res(n_genes,n_clusters); res.fill(-1);                             // array of p-values
+  arma::mat res_T_obs(n_genes,n_clusters); res.fill(-1);                       // array of p-values
   arma::vec seq0(N_breaks), breaks(N_breaks);
   for (b=0 ; b<N_breaks ; b++) {
     seq0(b) = b + 1.0;
@@ -441,11 +442,12 @@ List perm_test_covariates(unsigned int const& P,                             // 
           }
         }
         
-        res(gene,cl_id) = p_val;
+        res(gene, cl_id) = p_val;
+        res_T_obs(gene, cl_id) = T_obs;
       }
     }       // End of loop for genes
   }         // End of loop for clusters
   
-  List output = List::create( res );
+  List output = List::create( res, res_T_obs);
   return output;
 }

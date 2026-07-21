@@ -3,9 +3,8 @@ title: "distinct: a method for differential analyses via hierarchical permutatio
 author:
 - name: Simone Tiberi
   affiliation:
-  - &IMLS Institute for Molecular Life Sciences, University of Zurich, Switzerland
-  - &SIB SIB Swiss Institute of Bioinformatics, University of Zurich, Switzerland
-  email: simone.tiberi@uzh.ch
+  - &Stats Department of Statistical Sciences, University of Bologna, Italy
+  email: simone.tiberi@unibo.it
 package: "`r BiocStyle::pkg_ver('distinct')`"
 date: "`r format(Sys.Date(), '%m/%d/%Y')`"
 bibliography: References.bib
