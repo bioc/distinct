@@ -27,6 +27,7 @@
 #' @return A \code{\linkS4class{data.frame}} object.
 #' Columns `gene` and `cluster_id` contain the gene and cell-cluster name, while `p_val`, `p_adj.loc` and `p_adj.glb` report the raw p-values, locally and globally adjusted p-values, via Benjamini and Hochberg (BH) correction.
 #' In locally adjusted p-values (`p_adj.loc`) BH correction is applied in each cluster separately, while in globally adjusted p-values (`p_adj.glb`) BH correction is performed to the results from all clusters.
+#' Columns `T_obs` has the test statististic that quantifies the difference between groups, and is used to compute `p_val`.
 #' Column `filtered` indicates whether a gene-cluster result was filtered (if TRUE), or analyzed (if FALSE).
 #' A gene-cluster combination is filtered when fewer than `min_non_zero_cells` non-zero cells are available.
 #' Filtered results have raw and adjusted p-values equal to 1.
@@ -280,7 +281,7 @@ distinct_test = function(x,
       
       if(n_cores > 1){
         # call a R wrapper, that parallelizes Rcpp code from R:
-        p_val = perm_test_parallel_covariates_R(P_1, # number of permutations
+        RES = perm_test_parallel_covariates_R(P_1, # number of permutations
                                                 P_2,
                                                 P_3,
                                                 P_4,
@@ -295,7 +296,7 @@ distinct_test = function(x,
                                                 as.matrix(design_covar))
       }else{
         # call non-parallel Rcpp code:
-        p_val = .Call(`_distinct_perm_test_covariates`,
+        RES = .Call(`_distinct_perm_test_covariates`,
                       P_1, # number of permutations
                       P_2,
                       P_3,
@@ -308,12 +309,12 @@ distinct_test = function(x,
                       group_ids_of_samples, # ids of groups (1 or 2) for every sample
                       min_non_zero_cells, # min number of cells with > 0 expression in each group
                       t(counts),
-                      as.matrix(design_covar))[[1]] # [[1]]: results returned as a 1 element list
+                      as.matrix(design_covar))
       }
     }else{ # 2-group:
       if(n_cores > 1){
         # call a R wrapper, that parallelizes Rcpp code from R:
-        p_val = perm_test_parallel_R(P_1, # number of permutations
+        RES = perm_test_parallel_R(P_1, # number of permutations
                                      P_2,
                                      P_3,
                                      P_4,
@@ -327,7 +328,7 @@ distinct_test = function(x,
                                      n_cores)
       }else{
         # call non-parallel Rcpp code:
-        p_val = .Call(`_distinct_perm_test`,
+        RES = .Call(`_distinct_perm_test`,
                       P_1, # number of permutations
                       P_2,
                       P_3,
@@ -339,10 +340,13 @@ distinct_test = function(x,
                       n_samples, # total number of samples
                       group_ids_of_samples, # ids of groups (1 or 2) for every sample
                       min_non_zero_cells, # min number of cells with > 0 expression in each group
-                      t(counts) )[[1]] # [[1]]: results returned as a 1 element list
+                      t(counts) )
       }
     }
   }
+  p_val = RES[[1]]
+  T_obs = RES[[2]]
+  rm(RES)
   
   message("Differential testing completed, returning results")
   
@@ -351,12 +355,14 @@ distinct_test = function(x,
   
   # set -1s to NA, so that we don't use these elements when adjusting p-values:
   p_val[ p_val == -1 ] = NA
+  T_obs[ T_obs == -1] = NA
   
   # locally adjusted p-values:
   res_adjusted_locally = apply(p_val, 2, p.adjust, method = "BH")
   
   filtered = c(filtered)
   p_val = c(p_val)
+  T_obs = c(T_obs)
   res_adjusted_locally = c(res_adjusted_locally)
   # globally adjusted p-values:
   res_adjusted_globally = p.adjust(p_val, method = "BH")
@@ -372,6 +378,7 @@ distinct_test = function(x,
     p_val = p_val,
     p_adj.loc = res_adjusted_locally,
     p_adj.glb = res_adjusted_globally,
+    T_obs = T_obs,
     filtered = filtered
   )
   

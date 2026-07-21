@@ -14,7 +14,7 @@ plot_densities(
   gene,
   group_level = FALSE,
   adjust = 1,
-  size = 0.75
+  linewidth = 0.75
 )
 }
 \arguments{
@@ -41,7 +41,7 @@ indicating the name of the colData(x) element which stores the group id of each 
 
 \item{adjust}{a numeric, representing a multiplicate bandwidth adjustment, argument passed to \code{\link{stat_density}}.}
 
-\item{size}{a numeric argument defining the width of lines, passed to \code{\link{stat_density}}.}
+\item{linewidth}{a numeric argument defining the width of lines, passed to \code{\link{stat_density}}.}
 }
 \value{
 A \code{\link{ggplot}} object.

@@ -17,7 +17,7 @@
 #' @param gene a character, indicating the name of the gene to plot.
 #' @param group_level a logical, indicating whether to plot group-level (if TRUE) or sample-level curves (if FALSE).
 #' @param adjust a numeric, representing a multiplicate bandwidth adjustment, argument passed to \code{\link{stat_density}}.
-#' @param size a numeric argument defining the width of lines, passed to \code{\link{stat_density}}.
+#' @param linewidth a numeric argument defining the width of lines, passed to \code{\link{stat_density}}.
 #' @return A \code{\link{ggplot}} object.
 #' @examples
 #' data("Kang_subset", package = "distinct")
@@ -45,7 +45,7 @@ plot_densities = function(x,
                           gene,
                           group_level = FALSE,
                           adjust = 1,
-                          size = 0.75){
+                          linewidth = 0.75){
   
   stopifnot(
     ( is(x, "SummarizedExperiment") | is(x, "SingleCellExperiment") ),
@@ -141,7 +141,7 @@ plot_densities = function(x,
   gg +
     stat_density(aes(x=x, colour=group), 
                  adjust = adjust,
-                 size = size,
+                 linewidth = linewidth,
                  geom="line", position="identity") +
     theme_bw() + 
     theme(panel.grid = element_blank()) +

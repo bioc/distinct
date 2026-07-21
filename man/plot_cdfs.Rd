@@ -14,7 +14,7 @@ plot_cdfs(
   gene,
   group_level = FALSE,
   pad = TRUE,
-  size = 0.75
+  linewidth = 0.75
 )
 }
 \arguments{
@@ -41,7 +41,7 @@ indicating the name of the colData(x) element which stores the group id of each 
 
 \item{pad}{a logical element indicating whether to plot the lines of the CDF when 0 and 1 (TRUE) or not (FALSE).}
 
-\item{size}{a numeric argument defining the width of lines, passed to \code{\link{stat_ecdf}}.}
+\item{linewidth}{a numeric argument defining the width of lines, passed to \code{\link{stat_ecdf}}.}
 }
 \value{
 A \code{\link{ggplot}} object.
