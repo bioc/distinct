@@ -180,7 +180,7 @@ List perm_test(unsigned int const& P,                             // number of p
       //std::random_shuffle(permutation.begin(), permutation.end(), randWrapper);
       //PERMUTATIONS(_,p) = permutation;
     }
-    PERM = Rcpp::as<arma::umat>(PERMUTATIONS);
+    //PERM = Rcpp::as<arma::umat>(PERMUTATIONS);
     
     /* SECOND permutation martix */ 
     arma::umat PERM_2(n_cells,P_2-P);
